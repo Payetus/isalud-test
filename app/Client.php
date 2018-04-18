@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Serializers\ISerializeCSV;
+use App\Serializers\ICsvSerializable;
 
 class Client implements ICsvSerializable
 {
