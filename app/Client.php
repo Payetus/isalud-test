@@ -4,7 +4,7 @@ namespace App;
 
 use App\Serializers\ISerializeCSV;
 
-class Client implements ISerializeCSV
+class Client implements ICsvSerializable
 {
     protected $name;
     protected $email;

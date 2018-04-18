@@ -1,9 +1,0 @@
-<?php
-
-/**
- *
- */
-interface ISerializeCSV
-{
-    # code...
-}
