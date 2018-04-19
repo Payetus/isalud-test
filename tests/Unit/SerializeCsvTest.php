@@ -64,7 +64,7 @@ class SerializeCsvTest extends TestCase
         $serializer->serializeArray($handle, $arr);
         fclose($handle);
         // assert
-        $this->assertFileEquals('test2.txt', 'test2.txt');
+        $this->assertFileEquals('test2.txt', 'tests/resources/2clients.csv');
     }
 
     public function testCsvSerializerToFile($value='')
@@ -75,7 +75,7 @@ class SerializeCsvTest extends TestCase
         // act
         $serializer->serializeToFile('test3.txt', $arr);
         // assert
-        $this->assertFileEquals('test3.txt', 'test2.txt');
+        $this->assertFileEquals('test3.txt','tests/resources/2clients.csv');
 
     }
 }
