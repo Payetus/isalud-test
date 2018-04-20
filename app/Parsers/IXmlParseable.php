@@ -5,7 +5,7 @@ namespace App\Parsers;
 /**
  *
  */
-interface IJsonParseable
+interface IXmlParseable
 {
     public function jsonObjectToObject($jsonObject);
 }
