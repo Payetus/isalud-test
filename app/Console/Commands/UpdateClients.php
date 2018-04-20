@@ -56,23 +56,11 @@ class UpdateClients extends Command
         $factory = new ClientFactory();
         // Obtain data from api
         $this->line('Obtaining data from internal api');
-        $res = $httpClient->get($apiUrl);
-        $apiClients = [];
-        if ($res->getStatusCode() == 200) {
-            $json = $res->getBody();
-            $parser = new JsonParser();
-            $apiClients = $parser->parse($json, $factory);
-            $this->info('Obtained '.count($apiClients).' from api');
-        }else{
-            $this->error('Failed to obtain data from api');
-        }
+        $apiClients = $this->getApiClients($apiUrl);
+
         // Obtain data from xml file
         $this->line('Obtaining data from file');
-        // Parse data to clients
-        $xml = file_get_contents($filePath);
-        $parser = new XmlParser;
-        $fileClients = $parser->parse($xml, $factory);
-        $this->info('Obtained '.count($fileClients).' from file: '.$filePath);
+        $fileClients = $this->getFileClients($filePath);
         // join data
         $clients = array_merge($apiClients, $fileClients);
         $this->info('Serializing to file: '.$resultPath);
@@ -80,5 +68,29 @@ class UpdateClients extends Command
         $serializer = new CsvSerializer;
         $serializer->serializeToFile($resultPath, $clients);
 
+    }
+    private function getApiClients($url)
+    {
+        $res = $httpClient->get($url);
+        $apiClients = [];
+        if ($res->getStatusCode() == 200) {
+            $json = $res->getBody();
+            // Parse data
+            $parser = new JsonParser();
+            $apiClients = $parser->parse($json, $factory);
+            $this->info('Obtained '.count($apiClients).' from api');
+        }else{
+            $this->error('Failed to obtain data from api');
+        }
+        return $apiClients;
+    }
+
+    private function getFileClients($path)
+    {
+        $xml = file_get_contents($path);
+        // Parse Xml
+        $parser = new XmlParser;
+        $fileClients = $parser->parse($xml, $factory);
+        $this->info('Obtained '.count($fileClients).' from file: '.$filePath);
     }
 }
