@@ -4,7 +4,8 @@
 
 ### Instalación del archivo comprimido
 * unzip isalud-test.zip
-* `cd isalud-test` 
+* `cd isalud-test`
+* `composer install`
 
 ### Instalación de repositorio
 * `git clone https://github.com/Payetus/isalud-test`
