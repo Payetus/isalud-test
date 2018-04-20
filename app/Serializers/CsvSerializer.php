@@ -9,6 +9,7 @@ class CsvSerializer
 {
     protected $delimiter = "|";
 
+    
     public function serialize($handle, ICsvSerializable $object)
     {
         fputcsv($handle, $object->toCsvArray(), $this->delimiter);

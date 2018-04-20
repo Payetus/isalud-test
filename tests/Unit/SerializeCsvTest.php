@@ -46,10 +46,10 @@ class SerializeCsvTest extends TestCase
     {
         // Arrange
         $serializer = new CsvSerializer();
-        $handle = fopen('test.txt', 'w');
+        $handle = fopen('test.csv', 'w');
         // act
         $serializer->serialize($handle, $this->client);
-        $this->assertFileEquals('test.txt', 'test.txt');
+        $this->assertFileEquals('test.csv', 'tests/resources/1client.csv');
         fclose($handle);
         // assert
     }
@@ -59,12 +59,12 @@ class SerializeCsvTest extends TestCase
         // Arrange
         $arr = [$this->client, $this->client];
         $serializer = new CsvSerializer();
-        $handle = fopen('test2.txt', 'w');
+        $handle = fopen('test2.csv', 'w');
         // act
         $serializer->serializeArray($handle, $arr);
         fclose($handle);
         // assert
-        $this->assertFileEquals('test2.txt', 'tests/resources/2clients.csv');
+        $this->assertFileEquals('test2.csv', 'tests/resources/2clients.csv');
     }
 
     public function testCsvSerializerToFile()
@@ -73,9 +73,9 @@ class SerializeCsvTest extends TestCase
         $arr = [$this->client, $this->client];
         $serializer = new CsvSerializer();
         // act
-        $serializer->serializeToFile('test3.txt', $arr);
+        $serializer->serializeToFile('test3.csv', $arr);
         // assert
-        $this->assertFileEquals('test3.txt','tests/resources/2clients.csv');
+        $this->assertFileEquals('test3.csv','tests/resources/fileSerialize.csv');
 
     }
 }
