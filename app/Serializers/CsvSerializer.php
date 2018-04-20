@@ -9,28 +9,46 @@ class CsvSerializer
 {
     protected $delimiter = "|";
 
-    
-    public function serialize($handle, ICsvSerializable $object)
+    /**
+     * Serializes object to csv
+     * @param  resource         $handle stream where to input de serailized data
+     * @param  ICsvSerializable $object object to serialize
+     * @return bool       Succes or failed of operation
+     */
+    public function serialize($handle, ICsvSerializable $object): bool
     {
-        fputcsv($handle, $object->toCsvArray(), $this->delimiter);
+        return fputcsv($handle, $object->toCsvArray(), $this->delimiter);
     }
-
-    public function serializeArray($handle,  array $arrayCsv)
+    /**
+     * Serializes  array of object to csv
+     * @param  resource   $handle stream where to input de serailized data
+     * @param  array      $arrayCsv array of objects to serialize
+     * @return bool       Succes or failed of operation
+     */
+    public function serializeArray($handle,  array $arrayCsv): bool
     {
+        $result = true;
         foreach ($arrayCsv as $object) {
-            $this->serialize($handle, $object);
+            $result = $result && $this->serialize($handle, $object);
         }
+        return $result;
     }
-
-    public function serializeToFile($path, array $arr)
+    /**
+     * Serializes  array of object to csv file
+     * @param  string   $path path where to create the csv file
+     * @param  array      $arrayCsv array of objects to serialize
+     * @return bool       Succes or failed of operation
+     */
+    public function serializeToFile($path, array $arr): bool
     {
         if(count($arr)>0){
             $handle = fopen($path, 'w');
             // add headers
             // // TODO: Make this dynamic
             fputcsv($handle, ['Nombre', 'Email', 'Telefóno', 'Empresa'], $this->delimiter);
-            $this->serializeArray($handle, $arr);
+            $result = $this->serializeArray($handle, $arr);
             fclose($handle);
+            return $result;
         } else {
             return false;
         }
