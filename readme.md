@@ -1,59 +1,55 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Prueba tècnica iSalud
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Guia de instalacion
+* unzip isalud-test
+* `cd isalud-test`
+* `composer install`
+* `php artisan key:generate`
 
-## About Laravel
+## Guia de ejecución
+El comando para ejecutar la prueba es el siguiente:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+`php artisan clients:update`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+El comando espera una serie de parametros:
+* El path donde debe ubicar el csv resultante (obligatorio)
+* El path del fichero xml que contiene los datos de cliente (opcional tiene un valor por defecto)
+* La URL de la api que se debe atacar (opcional tiene un valor por defecto)
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+Usage:
+> `clients:update [options] [--] <path>`
 
-## Learning Laravel
+Arguments:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+>path                  Path of the file where the csv is stored
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+Options:
 
-## Laravel Sponsors
+      --api[=API]       Api url endpoint where to obtain the json data [default: "https://jsonplaceholder.typicode.com/users"]
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+      --file[=FILE]     Path of the xml file where to obatain the data [default: "data.xml"]
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Pulse Storm](http://www.pulsestorm.net/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
 
-## Contributing
+Para mas información podeis consultar como usar el comando mediante el comando
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+`php artisan clients:update -h`
 
-## Security Vulnerabilities
+## Ejecutar unit tests
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Se pueden ejecutar los Unit con el comando:
 
-## License
+`phpunit`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+En caso de que el comando anterior no funcione probad el siguiente comando
+
+`vendor/bin/phpunit`
+
+## Librerias adicionales usadas
+* 'guzzle/guzzle' Para las llamadas http a la api
+
+## Codigo interesante de ser revisado
+* app\Serializers\\*
+* app\Factories\\*
+* app\Parsers\\*
+* app\Client.php
+* app\Console\Commands\UpdateClients.php
