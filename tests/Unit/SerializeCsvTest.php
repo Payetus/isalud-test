@@ -67,7 +67,7 @@ class SerializeCsvTest extends TestCase
         $this->assertFileEquals('test2.txt', 'tests/resources/2clients.csv');
     }
 
-    public function testCsvSerializerToFile($value='')
+    public function testCsvSerializerToFile()
     {
         // Arrange
         $arr = [$this->client, $this->client];
