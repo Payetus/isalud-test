@@ -1,10 +1,15 @@
 # Prueba tècnica iSalud
 
-## Guia de instalacion
-* unzip isalud-test
+## Guia de instalación
+
+### Instalación del archivo comprimido
+* unzip isalud-test.zip
+* `cd isalud-test` 
+
+### Instalación de repositorio
+* `git clone https://github.com/Payetus/isalud-test`
 * `cd isalud-test`
 * `composer install`
-* `php artisan key:generate`
 
 ## Guia de ejecución
 El comando para ejecutar la prueba es el siguiente:
