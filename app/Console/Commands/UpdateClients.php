@@ -29,6 +29,7 @@ class UpdateClients extends Command
      * @var string
      */
     protected $description = 'Command description';
+    protected $factory;
 
     /**
      * Create a new command instance.
@@ -38,6 +39,7 @@ class UpdateClients extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->factory = new ClientFactory();
     }
 
     /**
@@ -52,8 +54,6 @@ class UpdateClients extends Command
         $apiUrl = $this->option('api');
         $filePath = $this->option('file');
 
-        $httpClient = new HttpClient();
-        $factory = new ClientFactory();
         // Obtain data from api
         $this->line('Obtaining data from internal api');
         $apiClients = $this->getApiClients($apiUrl);
@@ -63,34 +63,48 @@ class UpdateClients extends Command
         $fileClients = $this->getFileClients($filePath);
         // join data
         $clients = array_merge($apiClients, $fileClients);
+        $this->info('Total number of clients: '.count($clients));
         $this->info('Serializing to file: '.$resultPath);
         // serialize to csv
         $serializer = new CsvSerializer;
         $serializer->serializeToFile($resultPath, $clients);
 
     }
+    /**
+     * Gets the client from the Api
+     * @param  String $url Api url endpoint
+     * @return array    Array of clients
+     */
     private function getApiClients($url)
     {
+        // TODO: Refactor: encapsulate in a new class
+        $httpClient = new HttpClient;
         $res = $httpClient->get($url);
         $apiClients = [];
         if ($res->getStatusCode() == 200) {
             $json = $res->getBody();
             // Parse data
             $parser = new JsonParser();
-            $apiClients = $parser->parse($json, $factory);
+            $apiClients = $parser->parse($json, $this->factory);
             $this->info('Obtained '.count($apiClients).' from api');
         }else{
             $this->error('Failed to obtain data from api');
         }
         return $apiClients;
     }
-
-    private function getFileClients($path)
+    /**
+     * Gets clients from xml file
+     * @param  String $path Path to the xml file
+     * @return array        Array of clients
+     */
+    private function getFileClients($path): array
     {
+        // TODO: Refactor: encapsulate in a new class
         $xml = file_get_contents($path);
         // Parse Xml
         $parser = new XmlParser;
-        $fileClients = $parser->parse($xml, $factory);
-        $this->info('Obtained '.count($fileClients).' from file: '.$filePath);
+        $fileClients = $parser->parse($xml, $this->factory);
+        $this->info('Obtained '.count($fileClients).' from file: '.$path);
+        return $fileClients;
     }
 }
