@@ -23,11 +23,7 @@ class ParseTest extends TestCase
     {
         $this->client = new Client($this->name, $this->email, $this->phone, $this->companyName);
     }
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+
     public function testXmlParse()
     {
         // arrange
@@ -41,11 +37,6 @@ class ParseTest extends TestCase
         $this->assertEquals([$this->client], $result);
     }
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
     public function testJsonParse()
     {
         // Arrange
