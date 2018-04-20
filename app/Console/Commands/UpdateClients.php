@@ -17,7 +17,11 @@ class UpdateClients extends Command
      *
      * @var string
      */
-    protected $signature = 'clients:update';
+    protected $signature = 'clients:update
+        {path : Path of the file where the csv is stored }
+        {--api=https://jsonplaceholder.typicode.com/users : Api url endpoint where to obtain the json data}
+        {--file=data.xml : Path of the xml file where to obatain the data}
+        ';
 
     /**
      * The console command description.
@@ -43,36 +47,38 @@ class UpdateClients extends Command
      */
     public function handle()
     {
+        //Obtaining arguments and options
+        $resultPath = $this->argument('path');
+        $apiUrl = $this->option('api');
+        $filePath = $this->option('file');
+
         $httpClient = new HttpClient();
         $factory = new ClientFactory();
         // Obtain data from api
         $this->line('Obtaining data from internal api');
-        $res = $httpClient->get('https://jsonplaceholder.typicode.com/users');
+        $res = $httpClient->get($apiUrl);
         $apiClients = [];
         if ($res->getStatusCode() == 200) {
             $json = $res->getBody();
-            $this->info('OK response');
-            // Parse data to clients array
             $parser = new JsonParser();
             $apiClients = $parser->parse($json, $factory);
             $this->info('Obtained '.count($apiClients).' from api');
         }else{
-            $this->error('Failed to obtain data');
+            $this->error('Failed to obtain data from api');
         }
         // Obtain data from xml file
         $this->line('Obtaining data from file');
         // Parse data to clients
-        $xml = file_get_contents("data.xml");
+        $xml = file_get_contents($filePath);
         $parser = new XmlParser;
         $fileClients = $parser->parse($xml, $factory);
-        $this->info('Obtained '.count($fileClients).' from file');
+        $this->info('Obtained '.count($fileClients).' from file: '.$filePath);
         // join data
         $clients = array_merge($apiClients, $fileClients);
-        $this->info('Serializing to file');
+        $this->info('Serializing to file: '.$resultPath);
         // serialize to csv
         $serializer = new CsvSerializer;
-        $path = "result.csv";
-        $serializer->serializeToFile($path, $clients);
+        $serializer->serializeToFile($resultPath, $clients);
 
     }
 }
