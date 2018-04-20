@@ -7,9 +7,11 @@ namespace App\Serializers;
  */
 class CsvSerializer
 {
+    protected $delimiter = "|";
+
     public function serialize($handle, ICsvSerializable $object)
     {
-        fputcsv($handle, $object->toCsvArray());
+        fputcsv($handle, $object->toCsvArray(), $this->delimiter);
     }
 
     public function serializeArray($handle,  array $arrayCsv)
@@ -18,10 +20,18 @@ class CsvSerializer
             $this->serialize($handle, $object);
         }
     }
+
     public function serializeToFile($path, array $arr)
     {
-        $handle = fopen($path, 'w');
-        $this->serializeArray($handle, $arr);
-        fclose($handle);
+        if(count($arr)>0){
+            $handle = fopen($path, 'w');
+            // add headers
+            // // TODO: Make this dynamic
+            fputcsv($handle, ['Nombre', 'Email', 'Telefóno', 'Empresa'], $this->delimiter);
+            $this->serializeArray($handle, $arr);
+            fclose($handle);
+        } else {
+            return false;
+        }
     }
 }
